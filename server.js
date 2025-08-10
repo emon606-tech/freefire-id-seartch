@@ -6,8 +6,17 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS for our frontend
-app.use(cors());
+// Enable CORS for GitHub Pages frontend
+app.use(cors({
+    origin: [
+        'https://emonxxx11.github.io',
+        'https://freefire-id-seartch.onrender.com',
+        'http://localhost:3000'
+    ],
+    credentials: false,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Parse JSON bodies
 app.use(express.json());
@@ -56,9 +65,23 @@ function getHeaders() {
     };
 }
 
-// Serve the main HTML page at root URL
+// Root endpoint - redirect to GitHub Pages
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'player_lookup.html'));
+    res.redirect('https://emonxxx11.github.io/freefire-id-fornted/');
+});
+
+// API info endpoint
+app.get('/api', (req, res) => {
+    res.json({
+        name: 'Free Fire Player Lookup API',
+        version: '1.0.0',
+        frontend: 'https://emonxxx11.github.io/freefire-id-fornted/',
+        endpoints: {
+            health: '/api/health',
+            player: '/api/player/{uid}',
+            connectivity: '/api/test-connectivity'
+        }
+    });
 });
 
 // Main player lookup endpoint
@@ -206,5 +229,6 @@ app.listen(PORT, () => {
     console.log(`🌐 Server URL: http://localhost:${PORT}`);
     console.log(`🔍 Health Check: http://localhost:${PORT}/api/health`);
     console.log(`📊 Player Lookup: http://localhost:${PORT}/api/player/{uid}`);
-    console.log(`📄 HTML Page: http://localhost:${PORT}/`);
+    console.log(`🎮 Frontend: https://emonxxx11.github.io/freefire-id-fornted/`);
+    console.log(`📡 API Info: http://localhost:${PORT}/api`);
 }); 
