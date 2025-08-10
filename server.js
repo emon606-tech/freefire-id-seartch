@@ -56,6 +56,11 @@ function getHeaders() {
     };
 }
 
+// Serve the main HTML page at root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'player_lookup.html'));
+});
+
 // Main player lookup endpoint
 app.get('/api/player/:uid', async (req, res) => {
     const { uid } = req.params;
@@ -195,15 +200,11 @@ app.get('/api/test-connectivity', async (req, res) => {
     });
 });
 
-// Serve the main HTML page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'player_lookup.html'));
-});
-
 // Start the server
 app.listen(PORT, () => {
     console.log(`🚀 Free Fire Player Lookup Server running on port ${PORT}`);
     console.log(`🌐 Server URL: http://localhost:${PORT}`);
     console.log(`🔍 Health Check: http://localhost:${PORT}/api/health`);
     console.log(`📊 Player Lookup: http://localhost:${PORT}/api/player/{uid}`);
+    console.log(`📄 HTML Page: http://localhost:${PORT}/`);
 }); 
